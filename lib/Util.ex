@@ -1,4 +1,13 @@
 defmodule FileUtil do
+
+  def readFile(fileName) do
+    {:ok, words} =
+      File.read(fileName)
+        # |> Enum.map(&String.split(&1, ","))
+        # |> Enum.map(&String.to_integer/1)
+    words
+  end
+
   def readFileInList(fileName) do
     words =
       File.stream!(fileName)
@@ -37,6 +46,13 @@ defmodule MyLog do
     input
   end
 
+  def log(input, sideEffectFunc) do
+    output = sideEffectFunc.(input)
+    printString = getString(output)
+    IO.puts("Logger: " <> printString)
+    input
+  end
+
   def logToFile(input, sideEffectFunc, fileName) do
     output = sideEffectFunc.(input)
     FileUtil.writeToFile(getString(output), fileName)
@@ -66,7 +82,7 @@ defmodule MathUtil do
     # IO.puts("input: "<> Integer.to_string(input))
     output = 
     case stopFunction.(input) do 
-      true -> [0]
+      true -> []
       _ -> 
         next = targetFunction.(input)
         sub = recursiveUntil(next, targetFunction, stopFunction)

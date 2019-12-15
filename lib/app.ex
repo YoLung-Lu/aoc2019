@@ -4,6 +4,17 @@
 # Code.load_file("lib/day1.ex")
 
 defmodule App do
+
+  def day2 do
+    FileUtil.readFile("input/day2.txt")
+    |> String.split(",")
+    |> Enum.map(&String.to_integer/1)
+    |> IntCode.run
+    # Answer 2-1 ##
+    |> MyLog.log(&(List.first/1))
+    |> MyLog.logToFile("output/day2-1.txt")
+
+  end
   def day1 do
     input = FileUtil.readFileInList "input/day1.txt"
     # input = [100, 30]
@@ -54,11 +65,14 @@ defmodule App do
     # |> IO.puts
   end
 end
-
-App.day1Function()
+ 
+# App.day1Function()
+App.day2()
 
 
 # command:
+# Compile project
+# iex -S mix
 # iex -r *.exs
 # c "lib/app.exs"
 # ctrl + C
