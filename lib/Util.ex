@@ -65,14 +65,17 @@ defmodule MyLog do
   end
 
   defp getString(input) when is_list(input) do
+    IO.puts("list")
     Enum.join(input, ", ")
   end
 
   defp getString(input) when is_integer(input) do
+    IO.puts("integer")
     Integer.to_string(input)
   end
 
   defp getString(input) when is_binary(input) do
+    IO.puts("string")
     input
   end 
 end

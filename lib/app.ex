@@ -5,6 +5,15 @@
 
 defmodule App do
 
+  def day3 do 
+    FileUtil.readFile("input/day3.txt")
+    |> String.split("\n")
+    |> Enum.map(&String.split(&1, ","))
+    # |> Enum.map(&MyLog.log(&1))
+    |> CrossedWires.createMap
+    # |> Enum.map(&MyLog.log(&1))
+  end
+
   def day2 do
     FileUtil.readFile("input/day2.txt")
     |> String.split(",")
@@ -71,7 +80,7 @@ defmodule App do
 end
  
 # App.day1Function()
-App.day2()
+App.day3()
 
 
 # command:
