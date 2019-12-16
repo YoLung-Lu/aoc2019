@@ -9,6 +9,10 @@ defmodule App do
     FileUtil.readFile("input/day2.txt")
     |> String.split(",")
     |> Enum.map(&String.to_integer/1)
+    |> List.replace_at(1, 12)
+    |> List.replace_at(2, 2)
+    # |> List.replace_at(1, 93)
+    # |> List.replace_at(2, 42)
     |> IntCode.run
     # Answer 2-1 ##
     |> MyLog.log(&(List.first/1))

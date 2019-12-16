@@ -49,7 +49,7 @@ defmodule IntCode do
   end
 
   defp executeCommand(list, index, opcode) when opcode == 99 do
-    # printOpInfo(list, index, opcode)
+    printOpInfo(list, index, opcode)
     list
   end
 
