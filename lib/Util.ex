@@ -81,6 +81,40 @@ defmodule MyLog do
 end
 
 defmodule MathUtil do
+  def findMinInList(list) do
+    cond do
+      list == [] -> nil
+      true -> Enum.min(list)
+    end 
+  end
+  
+  def inBetween(value, range1, range2) do
+    (range1 <= value && value <= range2) || 
+    (range2 <= value && value <= range1)
+  end
+
+  def findSmallerPoint(point1, point2) do
+    [x1, y1] = point1
+    [x2, y2] = point2
+    d1 = x1*x1 + y1*y1
+    d2 = x2*x2 + y2*y2
+
+    cond do
+      d1 <= d2 -> point1
+      true -> point2
+    end
+
+  end
+  # def mergeListRange(lists1, list2) do
+  #   min2 = hd(list2)
+  #   max2 = tl(list2)
+  #   Enum
+  #   cond do
+  #     (min1 > max2) || (min2 > max1) ->
+  #       list1 ++ list2
+  #   end 
+  # end
+
   def recursiveUntil(input, targetFunction, stopFunction) do
     # IO.puts("input: "<> Integer.to_string(input))
     output = 

@@ -18,13 +18,13 @@ defmodule App do
     FileUtil.readFile("input/day2.txt")
     |> String.split(",")
     |> Enum.map(&String.to_integer/1)
-    |> List.replace_at(1, 12)
+    |> List.replace_at(1, 12) 
     |> List.replace_at(2, 2)
     # |> List.replace_at(1, 93)
     # |> List.replace_at(2, 42)
     |> IntCode.run
     # Answer 2-1 ##
-    |> MyLog.log(&(List.first/1))
+    |> MyLog.log(&(List.first/1)) 
     |> MyLog.logToFile("output/day2-1.txt")
 
   end
@@ -77,8 +77,8 @@ defmodule App do
     # |> PipeUtil.sideEffect(&FileUtil.writeToFile(&1, "output/day1-2.txt"))
     # |> IO.puts
   end
-end
- 
+end 
+
 # App.day1Function()
 App.day3()
 
