@@ -2,15 +2,27 @@
 # import FuelCounter
 # Code.load_file("lib/FileUtil.ex")
 # Code.load_file("lib/day1.ex")
+import CrossedWires2
 
 defmodule App do
 
+  def day32 do 
+    FileUtil.readFile("input/day3.txt")
+    # FileUtil.readFile("input/day3test.txt")
+    |> String.split("\n")
+    |> Enum.map(&String.split(&1, ","))
+    |> CrossedWires2.createLineList
+    # |> IO.inspect
+  end
+
   def day3 do 
     FileUtil.readFile("input/day3.txt")
+    # FileUtil.readFile("input/day3test.txt")
     |> String.split("\n")
     |> Enum.map(&String.split(&1, ","))
     # |> Enum.map(&MyLog.log(&1))
     |> CrossedWires.createMap
+    |> IO.inspect
     # |> Enum.map(&MyLog.log(&1))
   end
 
@@ -73,14 +85,14 @@ defmodule App do
     |> Enum.sum
     ## Answer 1-2 ##
     |> MyLog.logToFile("output/day1-2.txt")
-    # |> MyLog.log 
+    # |> MyLog.log
     # |> PipeUtil.sideEffect(&FileUtil.writeToFile(&1, "output/day1-2.txt"))
     # |> IO.puts
   end
 end 
 
 # App.day1Function()
-App.day3()
+App.day32()
 
 
 # command:

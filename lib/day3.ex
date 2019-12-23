@@ -7,13 +7,14 @@ defmodule CrossedWires do
     {line1MapX, line1MapY} = linesToMapRecursive(line1, 0, %{}, %{}, {0, 0})
     # %{ 5637 => [[7392, 8374]], 6592 => [[3527, 3673]], ...}
 
-    IO.inspect(line1MapX)
-    IO.inspect(line1MapY)
+    # IO.inspect(line1MapX)
+    # IO.inspect(line1MapY)
 
     intercept = linesInterceptWithMap(line2, 0, Map.keys(line1MapX), line1MapX, {0, 0}, [99999, 99999])
     intercept2 = linesInterceptWithMap(line2, 0, Map.keys(line1MapY), line1MapY, {0, 0}, [99999, 99999])
+
     inter = MathUtil.findSmallerPoint(intercept, intercept2)
-    IO.inspect(inter)
+    inter
   end
 
   def linesInterceptWithMap(lines, index, keys, map, position, intercept) do
@@ -40,6 +41,7 @@ defmodule CrossedWires do
     [xNew, yNew] = interceptNew
     intercept = cond do 
       xNew != nil && yNew != nil ->
+        # IO.inspect(interceptNew)
         MathUtil.findSmallerPoint(intercept, interceptNew)
       true ->
         intercept
