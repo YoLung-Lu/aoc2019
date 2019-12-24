@@ -132,6 +132,15 @@ defmodule MathUtil do
   end
 end
 
+defmodule StructureUtil do
+  def notEmptyList(list) do
+    list != nil && 
+    is_list(list) && 
+    list != [] &&
+    list != [nil]
+  end
+end
+
 # Test case
 # words = Util.readFileInList "../input/day1.txt"
 # IO.puts(["list is: \n", Enum.join(words, "\n")])

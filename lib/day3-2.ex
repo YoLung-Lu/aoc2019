@@ -1,22 +1,22 @@
 defmodule LineWalker do
   # Return the overall distance walk to a point.
   # nil when point NOT on the line.
-  def findPointDistanceOnLine([x, y| nextList], targetPoint, currentPoint, currentDistance) do
+  def findPointDistanceOnLine([x, y| nextList], targetPoint, currentPoint \\ [0,0], currentDistance \\ 0) do
     [tx, ty] = targetPoint
     [cx, cy] = currentPoint
 
     cond do
       (ty == cy) && (MathUtil.inBetween(tx, cx, cx + x)) ->
-        # IO.inspect("case1")
+        # IO.inspect("case1: Find intercept on x movement")
         currentDistance + abs(tx - cx)
       (tx == cx + x) && (MathUtil.inBetween(ty, cy, cy + y)) ->
-        # IO.inspect("case2")
+        # IO.inspect("case2: Find intercept on y movement")
         currentDistance + abs(x) + abs(ty - cy)
       nextList == [] ->
-        IO.inspect("Cannot find point on line!")
+        IO.inspect("case5: Cannot find point on line!")
         nil
       length(nextList) == 1 ->
-        # case of end in x
+        # IO.inspect("case3: end in x direction, will add a '0' movement for y.")
         findPointDistanceOnLine(nextList ++ [0], targetPoint, [cx + x, cy + y], currentDistance + abs(x) + abs(y))
       true ->
         # IO.inspect("case4")
@@ -30,10 +30,6 @@ defmodule LineWalker do
     keysX = Map.keys(line1MapX)
     keysY = Map.keys(line1MapY)
 
-    # IO.inspect(line1MapX)
-    point = [x, y]
-    # IO.inspect(point)
-
     interceptX = keysX
     |> Enum.filter(fn key -> MathUtil.inBetween(key, cx, cx + x) end)
     |> Enum.map(fn key -> 
@@ -46,9 +42,8 @@ defmodule LineWalker do
             true -> nil
           end
         end)
-        |> Enum.filter(fn list -> list != nil && is_list(list) && list != [] end)
       end)
-    |> Enum.filter(fn list -> list != nil && list != [nil] && list != [] end)
+    |> Enum.filter(fn list -> StructureUtil.notEmptyList(list) end)
   
     interceptY = keysY
     |> Enum.filter(fn key -> MathUtil.inBetween(key, cy, cy + y) end)
@@ -62,9 +57,8 @@ defmodule LineWalker do
             true -> nil
           end
         end)
-        |> Enum.filter(fn list -> list != nil && is_list(list) && list != [] end)
       end)
-    |> Enum.filter(fn list -> list != nil && list != [nil] && list != [] end)
+    |> Enum.filter(fn list -> StructureUtil.notEmptyList(list) end)
 
     returnValue = interceptX ++ interceptY
 
@@ -86,43 +80,40 @@ defmodule CrossedWires2 do
     line1 = hd(inputList)
     line2 = hd(tl(inputList))
 
+    line1 = cond do
+      String.first(hd(line1)) == "U" || String.first(hd(line1)) == "D" -> 
+        ["R0" | line1]
+      true -> line1
+    end 
+
+    line2 = cond do
+      String.first(hd(line2)) == "U" || String.first(hd(line2)) == "D" -> 
+        ["R0" | line2]
+      true -> line2
+    end 
+
     line1List = Enum.map(line1, &stringLineToInt/1)
     line2List = Enum.map(line2, &stringLineToInt/1)
-    # line1 |> Enum.map(&stringLineToInt/1)
 
     {line1MapX, line1MapY} = CrossedWires.linesToMapRecursive(line1, 0, %{}, %{}, {0, 0})
     # {line2MapX, line2MapY} = CrossedWires.linesToMapRecursive(line2, 0, %{}, %{}, {0, 0})
-    # IO.inspect(length(Map.keys(line1MapX)))
 
     pointList = LineWalker.findPointOnMaps(line2List, line1MapX, line1MapY, [0, 0])
-
     # pointList2 = LineWalker.findPointOnMaps(line1List, line2MapX, line2MapY, [0, 0])
-    IO.inspect(pointList)
-    # IO.inspect(pointList2)
     
-    # IO.inspect(pointList)
     pointList 
     |> Enum.map(fn points -> 
-      # IO.inspect(points)
       cond do
         is_list(points) ->
           [[x, y]] = points
-          line1ToPoint = LineWalker.findPointDistanceOnLine(line1List, [x, y], [0, 0], 0)
-          line2ToPoint = LineWalker.findPointDistanceOnLine(line2List, [x, y], [0, 0], 0)
-          # IO.inspect("Walk distance to point:")
+          line1ToPoint = LineWalker.findPointDistanceOnLine(line1List, [x, y])
+          line2ToPoint = LineWalker.findPointDistanceOnLine(line2List, [x, y])
           line1ToPoint + line2ToPoint
         true -> 
           IO.inspect("Failed to walk to point")
           nil
       end
     end)
-    |> IO.inspect
-
-    # Test
-    # LineWalker.findPointDistanceOnLine(line1List, [146, 46], [0, 0], 0)
-    # |> IO.inspect
-
-    # LineWalker.findPointDistanceOnLine(line2List, [146, 46], [0, 0], 0)
     # |> IO.inspect
   end
 

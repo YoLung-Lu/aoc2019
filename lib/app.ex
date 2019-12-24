@@ -6,13 +6,15 @@ import CrossedWires2
 
 defmodule App do
 
-  def day32 do 
-    FileUtil.readFile("input/day3.txt")
-    # FileUtil.readFile("input/day3test.txt")
+  def day32(file \\ "input/day3.txt") do 
+    FileUtil.readFile(file)
     |> String.split("\n")
     |> Enum.map(&String.split(&1, ","))
     |> CrossedWires2.createLineList
-    # |> IO.inspect
+    |> Enum.filter(fn x -> x > 0 end)
+    |> Enum.min
+    |> IO.inspect
+    |> MyLog.logToFile("output/day3-2.txt")
   end
 
   def day3 do 
@@ -23,6 +25,7 @@ defmodule App do
     # |> Enum.map(&MyLog.log(&1))
     |> CrossedWires.createMap
     |> IO.inspect
+    |> MyLog.logToFile("output/day3-1.txt")
     # |> Enum.map(&MyLog.log(&1))
   end
 
@@ -92,6 +95,7 @@ defmodule App do
 end 
 
 # App.day1Function()
+App.day3()
 App.day32()
 
 
