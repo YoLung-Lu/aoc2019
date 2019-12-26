@@ -87,6 +87,27 @@ defmodule MathUtil do
       true -> Enum.min(list)
     end 
   end
+
+  def separateHead(str) do
+    cond do
+      str == nil ->
+        {nil, nil}
+      String.length(str) == 1 ->
+        {String.to_integer(str), nil}
+      true ->
+        len = String.length(str)
+        int = String.to_integer(str)
+        tenx = :math.pow(10,(len - 1)) |> round
+        head = Integer.floor_div(int, tenx)
+        tail = String.slice(str, 1..-1)
+        {head, tail}
+    end
+  end
+
+  # TODO: Why not working?
+  # def separateHead() do
+  #   {nil, nil}
+  # end
   
   def inBetween(value, range1, range2) do
     (range1 <= value && value <= range2) || 

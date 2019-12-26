@@ -2,7 +2,8 @@
 # import FuelCounter
 # Code.load_file("lib/FileUtil.ex")
 # Code.load_file("lib/day1.ex")
-import CrossedWires2
+# import CrossedWires2
+import SecureContainer
 
 defmodule App do
 
@@ -95,8 +96,9 @@ defmodule App do
 end 
 
 # App.day1Function()
-App.day3()
-App.day32()
+# App.day3()
+# App.day32()
+# App.day41()
 
 
 # command:
