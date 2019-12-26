@@ -7,6 +7,35 @@ import SecureContainer
 
 defmodule App do
 
+  def day51(input \\ "input/day5.txt", output \\ "output/day5-1.txt") do
+    FileUtil.readFile(input)
+    |> String.split(",")
+    |> Enum.map(&String.to_integer/1)
+    # |> List.replace_at(1, 12) 
+    # |> List.replace_at(2, 2)
+    # |> List.replace_at(1, 93)
+    # |> List.replace_at(2, 42)
+    |> DiagnosticProgram.run
+    # Answer 2-1 ##
+    |> MyLog.log(&(List.first/1)) 
+    |> MyLog.logToFile(output)
+  end
+
+  def day41 do
+    # Enum.to_list(206938..233345)
+    Enum.to_list(206938..679128)
+    |> Enum.map(&Integer.to_string(&1))
+    |> Enum.map(&SecureContainer.checkCode(&1))
+    |> Enum.filter(fn x -> x != nil end)
+    # Answer for 4-1: 1653
+    |> MyLog.log(&(length/1))
+    |> Enum.map(&SecureContainer.filterLongDigits(&1))
+    # |> IO.inspect
+    |> Enum.filter(fn x -> x end)
+    # Answer for 4-2: 1133
+    |> MyLog.log(&(length/1))
+  end
+
   def day32(file \\ "input/day3.txt") do 
     FileUtil.readFile(file)
     |> String.split("\n")
