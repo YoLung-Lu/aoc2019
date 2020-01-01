@@ -4,8 +4,23 @@
 # Code.load_file("lib/day1.ex")
 # import CrossedWires2
 import SecureContainer
+import OrbitMap
 
 defmodule App do
+
+
+  def day62(input \\ "input/day6.txt", output \\ "output/day6-2.txt") do
+    FileUtil.readFile(input)
+    |> String.split("\n")
+    |> OrbitMap.meAndSan
+  end
+
+  def day61(input \\ "input/day6.txt", output \\ "output/day6-1.txt") do
+    FileUtil.readFile(input)
+    |> String.split("\n")
+    |> OrbitMap.run
+    # Answer 6-1: 162439 ##
+  end
 
   def day51(input \\ "input/day5.txt", output \\ "output/day5-1.txt") do
     FileUtil.readFile(input)

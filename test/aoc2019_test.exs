@@ -2,6 +2,14 @@ defmodule AOC2019Test do
   use ExUnit.Case
   # doctest AOC2019
 
+  test "day 6 - 2" do
+    App.day62()
+  end
+
+  # test "day 6 - 1" do
+  #   App.day61()
+  # end
+
   test "math" do
   #   IO.inspect(MathUtil.separateHead(nil))
   #   IO.inspect(MathUtil.separateHead("123503"))
