@@ -21,7 +21,10 @@ defmodule AOC2019Test do
     # assert {50, 2} = DiagnosticProgram.getParam([1, 2, 50], 1, 0)
     # assert {2, 2} = DiagnosticProgram.getParam([1, 2, 50], 1, 1)
     # App.day51("input/day5test.txt", "output/day5-1test.txt")
-    App.day51()
+
+    # assert {5, 1, 0, 0} = DiagnosticProgram.analyzeOperation([105, 0], 0)
+    # App.day51("input/day5-2test.txt", "output/day5-2test.txt")
+    # App.day51()
   end
 
   # test "day 4 - 2" do

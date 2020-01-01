@@ -45,6 +45,63 @@ defmodule DiagnosticProgram do
     executeCommand(list, index, analyzeOperation(list, index))
   end
 
+  defp executeCommand(list, index, {opCode, a, b, c}) when opCode == 5 do
+    index = index + 1
+    {param1, index} = getParam(list, index, a)
+    {param2, index} = getParam(list, index, b)
+    index = cond do
+      param1 != 0 -> 
+        IO.inspect("Jump to: " <> Integer.to_string(param2))
+        param2
+      true -> index
+    end
+    executeCommand(list, index, analyzeOperation(list, index))
+  end
+
+  defp executeCommand(list, index, {opCode, a, b, c}) when opCode == 6 do
+    index = index + 1
+    {param1, index} = getParam(list, index, a)
+    {param2, index} = getParam(list, index, b)
+    index = cond do
+      param1 == 0 -> 
+        IO.inspect("Jump to: " <> Integer.to_string(param2))
+        param2
+      true -> index
+    end
+    executeCommand(list, index, analyzeOperation(list, index))
+  end
+
+  defp executeCommand(list, index, {opCode, a, b, c}) when opCode == 7 do
+    index = index + 1
+    {param1, index} = getParam(list, index, a)
+    {param2, index} = getParam(list, index, b)
+    {param3, index} = getParam(list, index, 1)
+
+    storeValue = 
+      cond do
+        param1 < param2 -> 1
+        true -> 0
+      end
+    list = List.replace_at(list, param3, storeValue)
+    executeCommand(list, index, analyzeOperation(list, index))
+  end
+
+  defp executeCommand(list, index, {opCode, a, b, c}) when opCode == 8 do
+    index = index + 1
+    {param1, index} = getParam(list, index, a)
+    {param2, index} = getParam(list, index, b)
+    {param3, index} = getParam(list, index, 1)
+
+    storeValue = 
+      cond do
+        param1 == param2 -> 1
+        true -> 0
+      end
+      IO.inspect("8 replace: " <> Integer.to_string(param3))
+    list = List.replace_at(list, param3, storeValue)
+    executeCommand(list, index, analyzeOperation(list, index))
+  end
+
   defp executeCommand(list, index, {opCode, a, b, c}) when opCode == 99 do
     list
   end
@@ -62,7 +119,7 @@ defmodule DiagnosticProgram do
   end
 
   def getFromIO() do
-    1
+    5
   end
 
   defp listIndexPositionMode(list, index) do
@@ -70,11 +127,13 @@ defmodule DiagnosticProgram do
       Enum.at(list, valueIndex)
   end 
 
+  # parameter mode.
   def getParam(list, index, mode) when mode == 0 do
     param = listIndexPositionMode(list, index)
     {param, index + 1}
   end
 
+  # immediate mode.
   def getParam(list, index, mode) when mode == 1 do
     param = valueIndex = Enum.at(list, index)
     {param, index + 1}
