@@ -104,6 +104,21 @@ defmodule MathUtil do
     end
   end
 
+  def generateSequenceNumber(size, range) do
+    combinations(size, range)
+  end
+
+  # Reference: https://elixirforum.com/t/generate-all-combinations-having-a-fixed-array-size/26196/5
+  defp combinations(size, range) do
+    combinations(size, range, (for x <- range, do: [x]))
+  end
+
+  defp combinations(1, range, acc), do: acc
+
+  defp combinations(size, range, acc) do
+    combinations(size - 1, range, (for x <- range, y <- acc, !Enum.member?(y, x), do: [x | y]))
+  end
+
   # TODO: Why not working?
   # def separateHead() do
   #   {nil, nil}
@@ -162,7 +177,10 @@ defmodule StructureUtil do
   end
 end
 
-# Test case
-# words = Util.readFileInList "../input/day1.txt"
-# IO.puts(["list is: \n", Enum.join(words, "\n")])
-# Util.writeListToFile("../output/day1.txt", words)
+defmodule TestUtil do
+  def combinations(0, _), do: [[]]
+  def combinations(_, []), do: []
+  def combinations(size, [head | tail]) do 
+      (for elem <- combinations(size-1, tail), do: [head|elem]) ++ combinations(size, tail)
+  end
+end

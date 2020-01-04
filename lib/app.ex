@@ -8,6 +8,17 @@ import OrbitMap
 
 defmodule App do
 
+  def day71(input \\ "input/day7.txt", output \\ "output/day7-1.txt") do
+    FileUtil.readFile(input)
+    |> String.split(",")
+    |> Enum.map(&String.to_integer/1)
+    |> DiagnosticProgram7.runSequentially(5)
+    |> IO.inspect
+    # Answer 7-1 ##
+    # |> IO.inspect
+    # |> MyLog.log(&(List.first/1)) 
+    # |> MyLog.logToFile(output)
+  end
 
   def day62(input \\ "input/day6.txt", output \\ "output/day6-2.txt") do
     FileUtil.readFile(input)
