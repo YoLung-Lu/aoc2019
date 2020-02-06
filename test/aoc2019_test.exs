@@ -4,7 +4,7 @@ defmodule AOC2019Test do
 
   test "day 7 - 1" do
     # App.day71("input/day7-1test.txt", "output/day7-1.txt")
-    App.day71()
+    # App.day71()
   end
 
   test "sequence number generator" do
@@ -87,6 +87,10 @@ defmodule AOC2019Test do
   #   assert distance3  == nil
   #   assert distance2 == 20
   # end
+
+  test "day 1" do
+    App.day1v2()
+  end
 
   # test "recursive" do
   #   list = MyList2.delete_all(["Apple", "Pear", "Grapefruit", "Pear"], "Pear")

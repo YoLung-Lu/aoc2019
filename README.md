@@ -32,6 +32,9 @@ TODO: multiple return value?
 * Compile project
 `iex -S mix`
 
+* Run test
+`mix test`
+
 ### Day1
 
 * Pipe function -> first param is the piped data

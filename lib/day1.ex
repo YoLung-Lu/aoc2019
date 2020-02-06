@@ -32,6 +32,23 @@ defmodule FuelCounter do
   end
 end
 
+defmodule FuelCounterV2 do
+  def fuelFromMass(mass) when mass <= 5, do: 0
+  def fuelFromMass(mass) do
+    fuel = div(mass, 3) - 2
+    fuel + fuelFromMass(fuel)
+  end
+end
+
+defmodule FuelCounterV3 do
+  def fuelFromMass(mass), do: fuelFromMass(mass, 0)
+  def fuelFromMass(mass, acc) when mass <= 5, do: acc
+  def fuelFromMass(mass, acc) do
+    fuel = div(mass, 3) - 2
+    fuelFromMass(fuel, acc + fuel)
+  end
+end
+
 # Test.
 #FuelCounter.fuelSumByFunction4 [5, 10, 15, 20, 25, 30]
 

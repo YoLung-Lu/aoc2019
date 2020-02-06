@@ -3,8 +3,8 @@
 # Code.load_file("lib/FileUtil.ex")
 # Code.load_file("lib/day1.ex")
 # import CrossedWires2
-import SecureContainer
-import OrbitMap
+#import SecureContainer
+#import OrbitMap
 
 defmodule App do
 
@@ -96,6 +96,7 @@ defmodule App do
     |> MyLog.logToFile("output/day2-1.txt")
 
   end
+
   def day1 do
     input = FileUtil.readFileInList "input/day1.txt"
     # input = [100, 30]
@@ -144,6 +145,12 @@ defmodule App do
     # |> MyLog.log
     # |> PipeUtil.sideEffect(&FileUtil.writeToFile(&1, "output/day1-2.txt"))
     # |> IO.puts
+  end
+
+  def day1v2 do
+    FileUtil.readFileInList("input/day1.txt")
+    |> Enum.reduce(0, fn x, acc -> FuelCounterV2.fuelFromMass(x) + acc end)
+    |> IO.inspect
   end
 end 
 
