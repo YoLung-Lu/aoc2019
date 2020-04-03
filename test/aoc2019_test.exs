@@ -2,21 +2,10 @@ defmodule AOC2019Test do
   use ExUnit.Case
   # doctest AOC2019
 
-  test "day 7 - 1" do
-    # App.day71("input/day7-1test.txt", "output/day7-1.txt")
-    # App.day71()
-  end
-
-  test "sequence number generator" do
-    # t = MathUtil.generateSequenceNumber(5, 9..5)
-    # |> IO.inspect
-    # IO.inspect(length(t))
-    # |> IO.inspect(&(length/1))
-  #   assert true
-    # test = TestUtil.combinations(3, [5, 4, 3, 2, 1, 0])
-    # |> IO.inspect
-    # IO.inspect(length(test))
-  end
+#  test "day 7 - 1" do
+#     App.day71("input/day7-1test.txt", "output/day7-1.txt")
+#     App.day71()
+#  end
 
   # test "day 6 - 2" do
   #   App.day62()
@@ -25,17 +14,6 @@ defmodule AOC2019Test do
   # test "day 6 - 1" do
   #   App.day61()
   # end
-
-  test "math" do
-  #   IO.inspect(MathUtil.separateHead(nil))
-  #   IO.inspect(MathUtil.separateHead("123503"))
-    # IO.inspect(MathUtil.separateHead("207007"))
-    # IO.inspect(MathUtil.separateHead("207007"))
-    # IO.inspect(MathUtil.separateHead(nil))
-  # TODO: not working.
-    # a = String.match?("123", ~r/(?i)(?:([0-9])\\1{2,})*/)
-    assert true
-  end
 
   # test "day 5 - 1" do
   #   assert {1, 0, 1, 0} = DiagnosticProgram.analyzeOperation([1001, 0], 0)
@@ -88,12 +66,11 @@ defmodule AOC2019Test do
   #   assert distance2 == 20
   # end
 
-  test "day 1" do
-    App.day1v2()
+  test "day 2 refactor" do
+    App.day2()
   end
 
-  # test "recursive" do
-  #   list = MyList2.delete_all(["Apple", "Pear", "Grapefruit", "Pear"], "Pear")
-  #   assert list == ["Apple", "Grapefruit"]
-  # end
+#  test "day 1" do
+#    App.day1v2()
+#  end
 end

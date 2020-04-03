@@ -65,17 +65,17 @@ defmodule MyLog do
   end
 
   defp getString(input) when is_list(input) do
-    IO.puts("list")
+#    IO.puts("list")
     Enum.join(input, ", ")
   end
 
   defp getString(input) when is_integer(input) do
-    IO.puts("integer")
+#    IO.puts("integer")
     Integer.to_string(input)
   end
 
   defp getString(input) when is_binary(input) do
-    IO.puts("string")
+#    IO.puts("string")
     input
   end 
 end
@@ -175,6 +175,18 @@ defmodule StructureUtil do
     list != [] &&
     list != [nil]
   end
+
+  def list_to_indexed_map(list, startIndex) do
+    startIndex..(length(list) - (1 - startIndex)) |> Stream.zip(list) |> Enum.into(%{})
+  end
+
+  def indexed_map_to_list(map, index, list \\ []) do
+    cond do
+      Map.has_key?(map, index) -> indexed_map_to_list(map, index + 1, [map[index]|list])
+      true -> Enum.reverse(list)
+    end
+  end
+
 end
 
 defmodule TestUtil do

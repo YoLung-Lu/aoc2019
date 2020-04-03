@@ -1,76 +1,81 @@
 
 defmodule IntCode do
   def run(list) do
-    index = 0
-    opcode = getOpcode(list, index)
-    executeCommand(list, index, opcode)
-  end
-
-  # defp executeCommand(list, index, opcode) when opcode == 1 do
-  #   IO.puts("current index: " <> Integer.to_string(index))
-  #   IO.puts("opcode: " <> Integer.to_string(opcode))
-
-  #   cond do
-  #     opcode == 1 -> 
-  #       # IO.puts(Enum.at(list, index + 1))
-  #       sum = listIndexValue(list, index + 1) + listIndexValue(list, index + 2)
-  #       List.replace_at(list, index + 3, sum)
-  #       IO.puts(sum)
-  #       IO.puts(Enum.at(list, index + 3))
-  #       executeCommand(list, index + 4)
-  #     opcode == 2 -> 
-  #       # IO.puts(Enum.at(list, index + 1))
-  #       multiply = listIndexValue(list, index + 1) * listIndexValue(list, index + 2)
-  #       List.replace_at(list, index + 3, multiply)
-  #       IO.puts(multiply)
-  #       IO.puts(Enum.at(list, index + 3))
-  #       executeCommand(list, index + 4)
-  #     opcode == 99 -> list
-  #   end
-  # end
-
-  # TODO: Don't use List structure, its too expensive to update...
-  defp executeCommand(list, index, opcode) when opcode == 1 do
-    # printOpInfo(list, index, opcode)
-
-    sum = listIndexValue(list, index + 1) + listIndexValue(list, index + 2)
-    target = Enum.at(list, index + 3)
-    list = List.replace_at(list, target, sum)
-    executeCommand(list, index + 4, getOpcode(list, index + 4))
-  end
-
-  defp executeCommand(list, index, opcode) when opcode == 2 do
-  # printOpInfo(list, index, opcode)
-
-    multiply = listIndexValue(list, index + 1) * listIndexValue(list, index + 2)
-    target = Enum.at(list, index + 3)
-    list = List.replace_at(list, target, multiply)
-    executeCommand(list, index + 4, getOpcode(list, index + 4))
-  end
-
-  defp executeCommand(list, index, opcode) when opcode == 99 do
-    printOpInfo(list, index, opcode)
     list
+    |> StructureUtil.list_to_indexed_map(0)
+    |> loop_through_operation
+    |> StructureUtil.indexed_map_to_list(0)
+    |> Enum.join(",")
+#    |> IO.inspect
+
   end
 
-  defp printOpInfo(list, index, opcode) do
-    value1 = listIndexValue(list, index + 1)
-    value2 = listIndexValue(list, index + 2)
-    target = Enum.at(list, index + 3)
-    IO.puts("current index: " <> Integer.to_string(index))
-    IO.puts("opcode: " <> Integer.to_string(opcode))
-    IO.puts("value1: " <> Integer.to_string(value1))
-    IO.puts("value2: " <> Integer.to_string(value2))
-    IO.puts("target: " <> Integer.to_string(target))
-    IO.puts("--------------")
-  end 
-
-  defp getOpcode(list, index) do 
-    opcode = Enum.at(list, index)
+  defp loop_through_operation(map) do
+    loop_through_operation(map, 0, StateExecution.continue())
   end
 
-  defp listIndexValue(list, index) do
-      valueIndex = Enum.at(list, index)
-      Enum.at(list, valueIndex)
-  end 
+  defp loop_through_operation(map, index, %StateExecution{state: 99}) do
+#    IO.inspect(map[index])
+#    IO.inspect("stop")
+    map
+  end
+
+  defp loop_through_operation(map, index, _) do
+    {operation, nextIndex} = map_to_operation(map, index)
+    {map, nextState} = execute_operation(operation, map)
+    loop_through_operation(map, nextIndex, nextState)
+  end
+
+  defp execute_operation(%Operation{opCode: 1} = operation, map) do
+    sumValue = map[operation.param1] + map[operation.param2]
+    map = Map.merge(map, %{operation.param3 => sumValue})
+    {map, StateExecution.continue()}
+  end
+
+  defp execute_operation(%Operation{opCode: 2} = operation, map) do
+    multiplyValue = map[operation.param1] * map[operation.param2]
+    map = Map.merge(map, %{operation.param3 => multiplyValue})
+    {map, StateExecution.continue()}
+  end
+
+  defp execute_operation(%Operation{opCode: 99} = operation, map) do
+    {map, StateExecution.halt()}
+  end
+
+  defp map_to_operation(map, index) do
+    opCode = map[index]
+
+    operation = cond do
+      opCode == 1 -> Operation.new(opCode, map[index + 1], map[index + 2], map[index + 3])
+      opCode == 2 -> Operation.new(opCode, map[index + 1], map[index + 2], map[index + 3])
+      opCode == 99 -> Operation.new(opCode)
+    end
+
+    nextIndex = cond do
+      opCode == 1 -> index + 4
+      opCode == 2 -> index + 4
+      opCode == 99 -> 0
+    end
+
+    {operation, nextIndex}
+  end
+
+  ### Depth first approach. ###
+  #  defp map_to_operations(map, index) do
+  #    map_to_operations(map, index, [])
+  #  end
+  #
+  #  defp map_to_operations(map, index, operations) when index == -1 do
+  #    IO.inspect("end")
+  #    Enum.reverse(operations)
+  #  end
+  #
+  #  defp map_to_operations(map, index, operations) do
+  #
+  #    {operation, nextIndex} = map_to_operation(map, index)
+  #
+  #    operations = [operation | operations]
+  #    map_to_operations(map, nextIndex, operations)
+  #  end
 end
+

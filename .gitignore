@@ -24,3 +24,5 @@ aoc2019-*.tar
 
 # The answers.
 /output/
+
+/.idea

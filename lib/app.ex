@@ -92,7 +92,7 @@ defmodule App do
     # |> List.replace_at(2, 42)
     |> IntCode.run
     # Answer 2-1 ##
-    |> MyLog.log(&(List.first/1)) 
+#    |> MyLog.log(&(List.first/1))
     |> MyLog.logToFile("output/day2-1.txt")
 
   end
