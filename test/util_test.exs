@@ -24,37 +24,56 @@ defmodule UtilTest do
   #    assert true
   #  end
 
-   test "recursive" do
-     list = MyList2.delete_all(["Apple", "Pear", "Grapefruit", "Pear"], "Pear")
-     assert list == ["Apple", "Grapefruit"]
-   end
+#   test "recursive" do
+#     list = MyList2.delete_all(["Apple", "Pear", "Grapefruit", "Pear"], "Pear")
+#     assert list == ["Apple", "Grapefruit"]
+#   end
+#
+#  test "list to map" do
+#    map1 = StructureUtil.list_to_indexed_map([:a, :b, :c], 0)
+#    assert map1 == %{0 => :a, 1 => :b, 2 => :c}
+#
+#    map2 = StructureUtil.list_to_indexed_map([:a, :b, :c], 1)
+#    assert map2 == %{1 => :a, 2 => :b, 3 => :c}
+#  end
+#
+#  test "map to list" do
+#    list_input = [:a, :b, :c]
+#    map1 = StructureUtil.list_to_indexed_map(list_input, 0)
+#    list = StructureUtil.indexed_map_to_list(map1, 0)
+#    assert list == list_input
+#  end
+#
+#  test "Operation" do
+#    op1 = Operation.new(1, 2, 3)
+#    op2 = Operation.new(1, 2, 3, -1)
+#    assert op1 == op2
+#  end
+#
+#  test "The state" do
+#    state = OperationExecutionState.new()
+#    assert OperationExecutionState.is_halt(state) == false
+#
+#    state = OperationExecutionState.halt()
+#    assert OperationExecutionState.is_halt(state) == true
+#  end
 
-  test "list to map" do
-    map1 = StructureUtil.list_to_indexed_map([:a, :b, :c], 0)
-    assert map1 == %{0 => :a, 1 => :b, 2 => :c}
+#  test "lambda" do
+#    lambdda = fn() -> 5 end
+#
+#    assert lambdda.() == 5
+#  end
 
-    map2 = StructureUtil.list_to_indexed_map([:a, :b, :c], 1)
-    assert map2 == %{1 => :a, 2 => :b, 3 => :c}
-  end
+#  test "get pipe value" do
+#    d = DiagnosticContainer.set([1,2,3])
+#    {value1, d} = DiagnosticContainer.get(d)
+#    {value2, d} = DiagnosticContainer.get(d)
+#    {value3, d} = DiagnosticContainer.get(d)
+#    {value4, d} = DiagnosticContainer.get(d)
+#    assert value1 == 1
+#    assert value2 == 2
+#    assert value3 == 3
+#    assert value4 == 3
+#  end
 
-  test "map to list" do
-    list_input = [:a, :b, :c]
-    map1 = StructureUtil.list_to_indexed_map(list_input, 0)
-    list = StructureUtil.indexed_map_to_list(map1, 0)
-    assert list == list_input
-  end
-
-  test "Operation" do
-    op1 = Operation.new(1, 2, 3)
-    op2 = Operation.new(1, 2, 3, -1)
-    assert op1 == op2
-  end
-
-  test "The state" do
-    state = StateExecution.new()
-    assert StateExecution.is_halt(state) == false
-
-    state = StateExecution.halt()
-    assert StateExecution.is_halt(state) == true
-  end
 end

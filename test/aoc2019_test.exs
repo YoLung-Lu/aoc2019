@@ -66,9 +66,33 @@ defmodule AOC2019Test do
   #   assert distance2 == 20
   # end
 
-  test "day 2 refactor" do
-    App.day2()
+#  test "day 2 refactor" do
+#    App.day2()
+#  end
+
+  test "day 5 refactor" do
+    FileUtil.readFile("input/day5.txt")
+    |> String.split(",")
+    |> Enum.map(&String.to_integer/1)
+    |> IntCode.run
+
+#    App.day51()
+#    {"OP1", 1, 238, 239, 225}
   end
+
+#   test "day 5 - 1" do
+#     assert {1, 0, 1, 0} = DiagnosticProgram.analyzeOperation([1001, 0], 0)
+#     assert {1, 0, 1, 1} = DiagnosticProgram.analyzeOperation([11001, 0], 0)
+#     assert {2, 0, 0, 0} = DiagnosticProgram.analyzeOperation([2, 0], 0)
+#     assert {3, 1, 0, 0} = DiagnosticProgram.analyzeOperation([3, 0], 0)
+#     assert {50, 2} = DiagnosticProgram.getParam([1, 2, 50], 1, 0)
+#     assert {2, 2} = DiagnosticProgram.getParam([1, 2, 50], 1, 1)
+#     App.day51("input/day5test.txt", "output/day5-1test.txt")
+
+#     assert {5, 1, 0, 0} = DiagnosticProgram.analyzeOperation([105, 0], 0)
+#     App.day51("input/day5-2test.txt", "output/day5-2test.txt")
+#     App.day51()
+#   end
 
 #  test "day 1" do
 #    App.day1v2()

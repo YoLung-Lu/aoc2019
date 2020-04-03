@@ -10,11 +10,11 @@ defmodule DiagnosticProgram do
     index = index + 1
     {param1, index} = getParam(list, index, a)
     {param2, index} = getParam(list, index, b)
-    
     sum = param1 + param2
     target = Enum.at(list, index)
     list = List.replace_at(list, target, sum)
     index = index + 1
+    IO.inspect({"OP1", param1, param2, sum, target})
     executeCommand(list, index, analyzeOperation(list, index))
   end
 
