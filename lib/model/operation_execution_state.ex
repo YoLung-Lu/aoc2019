@@ -1,4 +1,9 @@
 defmodule OperationExecutionState do
+  @moduledoc """
+  A state machine to provide the state for `IntCode` to execute.
+  It encapsulate the state through struct, and the use case as interface.
+  """
+
   @continue 1
   @pause 2
   @halt 99
@@ -9,31 +14,43 @@ defmodule OperationExecutionState do
             output: 0,
             get_diagnostic: nil
 
+  # Use as initial state.
+  def fake() do
+    %OperationExecutionState{state: @continue}
+  end
+
   def new(index, get_diagnostic) do
     %OperationExecutionState{state: @continue, index: index, get_diagnostic: get_diagnostic}
   end
 
-  def continue(state) do
-    %OperationExecutionState{state: state.state, index: state.index, get_diagnostic: state.get_diagnostic}
-  end
-
   def continue(state, index) when is_integer(index) do
-    %OperationExecutionState{state: state.state, index: index, get_diagnostic: state.get_diagnostic}
+    Map.merge(state, %{:index => index})
   end
 
+  # Op 3
   def continue(state, diagnostic) do
-    %OperationExecutionState{state: state.state, index: state.index, get_diagnostic: diagnostic}
+    Map.merge(state, %{:state => @continue, :get_diagnostic => diagnostic})
   end
 
-  def pause(map, index, output) do
-    %OperationExecutionState{state: @pause, map: map, index: index, output: output}
+  # Op 3
+  def pause(state, map, index) do
+    Map.merge(state, %{:state => @pause, :map => map, :index => index})
   end
 
-  def halt(state) do
-    %OperationExecutionState{state: @halt, index: state.index, get_diagnostic: state.get_diagnostic}
+  # Op 4
+  def continue_with_output(state, output) do
+    Map.merge(state, %{:output => output})
+  end
+
+  def halt(state, map) do
+    Map.merge(state, %{:state => @halt, :map => map})
   end
 
   def is_halt(state) do
     state.state == @halt
+  end
+
+  def get_map(state) do
+    state.map
   end
 end

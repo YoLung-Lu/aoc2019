@@ -81,6 +81,14 @@ defmodule MyLog do
 end
 
 defmodule MathUtil do
+  def int_in_range(int, range) do
+    cond do
+      int < 0 -> int_in_range(int + range, range)
+      int >= range -> int_in_range(int - range, range)
+      true -> int
+    end
+  end
+
   def findMinInList(list) do
     cond do
       list == [] -> nil

@@ -80,11 +80,17 @@ defmodule AOC2019Test do
 ##    {"OP1", 1, 238, 239, 225}
 #  end
 
-  test "day 7-1 refactor" do
+  test "day 7-2 refactor" do
     FileUtil.readFile("input/day7.txt")
-    |> AmplificationCircuit.runSequentially
+    |> AmplificationCircuit.run_with_random_sequence_phase_setting
     |> IO.inspect
   end
+
+#  test "day 7-1 refactor" do
+#    FileUtil.readFile("input/day7.txt")
+#    |> AmplificationCircuit.runSequentially
+#    |> IO.inspect
+#  end
 
 #   test "day 5 - 1" do
 #     assert {1, 0, 1, 0} = DiagnosticProgram.analyzeOperation([1001, 0], 0)

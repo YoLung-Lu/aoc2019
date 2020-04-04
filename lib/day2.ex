@@ -1,33 +1,9 @@
 
 defmodule IntCode do
-  def runFeedbackLoop(inputStr) do
 
-    phaseSetting = MathUtil.generateSequenceNumber(5, 9..5)
-
-    firstLoopInput = [inputStr, inputStr, inputStr, inputStr, inputStr]
-    firstDiagnostic = [hd(hd(phaseSetting)), 0]
-
-    IO.inspect(firstDiagnostic)
-
-    {list, output} = runEachFeedbackLoop(firstLoopInput, DiagnosticContainer.set(firstDiagnostic), {[], 0})
-    IO.inspect(list)
-    IO.inspect(output)
-  end
-
-  def runEachFeedbackLoop([], _, lastOutput) do
-    lastOutput
-  end
-
-  def runEachFeedbackLoop([inputStr|tl], diagnostic, lastOutput) do
-#    IO.inspect("input: ")
-#    IO.inspect(inputStr)
-#    IO.inspect(diagnostic)
-    {lastStrList, lastOutput} = lastOutput
-    {outputStr, outputValue} = run(inputStr, diagnostic)
-#    IO.inspect("output: ")
-#    IO.inspect(outputStr)
-#    IO.inspect(outputValue)
-    runEachFeedbackLoop(tl, DiagnosticContainer.set([outputValue]), {[outputStr | lastStrList], outputValue})
+  # Public interface for 7-2.
+  def run_with_state(map, state) do
+    loop_through_operation(map, state)
   end
 
   def run(inputStr, inputList \\ DiagnosticContainer.set([5])) do
@@ -36,6 +12,7 @@ defmodule IntCode do
       |> Enum.map(&String.to_integer/1)
       |> StructureUtil.list_to_indexed_map(0)
       |> loop_through_operation(OperationExecutionState.new(0, inputList))
+      |> OperationExecutionState.get_map
       |> StructureUtil.indexed_map_to_list(0)
       |> Enum.join(",")
 #    |> IO.inspect
@@ -45,10 +22,16 @@ defmodule IntCode do
     {outputList, output}
   end
 
-  defp loop_through_operation(map, %OperationExecutionState{state: 99}) do
+  defp loop_through_operation(_, %OperationExecutionState{state: 2} = state) do
+#    IO.inspect(map[state.index])
+#    IO.inspect("pause")
+    state
+  end
+
+  defp loop_through_operation(_, %OperationExecutionState{state: 99} = state) do
 #    IO.inspect(map[state.index])
 #    IO.inspect("stop")
-    map
+    state
   end
 
   defp loop_through_operation(map, state) do
@@ -61,25 +44,33 @@ defmodule IntCode do
   defp execute_operation(%Operation{opCode: 1} = operation, map, state) do
     sumValue = map[operation.param1] + map[operation.param2]
     map = Map.merge(map, %{operation.param3 => sumValue})
-    {map, OperationExecutionState.continue(state)}
+    {map, state}
   end
 
   defp execute_operation(%Operation{opCode: 2} = operation, map, state) do
     multiplyValue = map[operation.param1] * map[operation.param2]
     map = Map.merge(map, %{operation.param3 => multiplyValue})
-    {map, OperationExecutionState.continue(state)}
+    {map, state}
   end
 
   defp execute_operation(%Operation{opCode: 3} = operation, map, state) do
-    {inputValue, diagnostic} = DiagnosticContainer.get(state.get_diagnostic)
-    map = Map.merge(map, %{operation.param1 => inputValue})
-    {map, OperationExecutionState.continue(state, diagnostic)}
+    # The switch to enable read same diagnostic code or not.
+#    {inputValue, diagnostic} = DiagnosticContainer.get(state.get_diagnostic)
+    {inputValue, diagnostic} = DiagnosticContainer.get_with_nil(state.get_diagnostic)
+
+    cond do
+      inputValue == nil ->
+        {map, OperationExecutionState.pause(state, map, state.index - 2)}
+      true ->
+        map = Map.merge(map, %{operation.param1 => inputValue})
+        {map, OperationExecutionState.continue(state, diagnostic)}
+    end
   end
 
   defp execute_operation(%Operation{opCode: 4} = operation, map, state) do
     outputValue = map[operation.param1]
-    MyLog.logToFile(outputValue, "output/day7_test.txt")
-    {map, OperationExecutionState.continue(state)}
+#    MyLog.logToFile(outputValue, "output/day7_test.txt")
+    {map, OperationExecutionState.continue_with_output(state, outputValue)}
   end
 
   # OP5: Jump if true
@@ -107,7 +98,7 @@ defmodule IntCode do
       true -> 0
     end
     map = Map.merge(map, %{operation.param3 => value})
-    {map, OperationExecutionState.continue(state)}
+    {map, state}
   end
 
   # OP8: Equal
@@ -118,11 +109,11 @@ defmodule IntCode do
       true -> 0
     end
     map = Map.merge(map, %{operation.param3 => value})
-    {map, OperationExecutionState.continue(state)}
+    {map, state}
   end
 
   defp execute_operation(%Operation{opCode: 99}, map, state) do
-    {map, OperationExecutionState.halt(state)}
+    {map, OperationExecutionState.halt(state, map)}
   end
 
   defp map_to_operation(map, index) do
