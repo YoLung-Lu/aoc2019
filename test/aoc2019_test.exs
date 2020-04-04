@@ -3,7 +3,7 @@ defmodule AOC2019Test do
   # doctest AOC2019
 
 #  test "day 7 - 1" do
-#     App.day71("input/day7-1test.txt", "output/day7-1.txt")
+##     App.day71("input/day7-1test.txt", "output/day7-1.txt")
 #     App.day71()
 #  end
 
@@ -70,14 +70,20 @@ defmodule AOC2019Test do
 #    App.day2()
 #  end
 
-  test "day 5 refactor" do
-    FileUtil.readFile("input/day5.txt")
-    |> String.split(",")
-    |> Enum.map(&String.to_integer/1)
-    |> IntCode.run
+#  test "day 5 refactor" do
+#    FileUtil.readFile("input/day5.txt")
+#    |> String.split(",")
+#    |> Enum.map(&String.to_integer/1)
+#    |> IntCode.run
+#
+##    App.day51()
+##    {"OP1", 1, 238, 239, 225}
+#  end
 
-#    App.day51()
-#    {"OP1", 1, 238, 239, 225}
+  test "day 7-1 refactor" do
+    FileUtil.readFile("input/day7.txt")
+    |> AmplificationCircuit.runSequentially
+    |> IO.inspect
   end
 
 #   test "day 5 - 1" do

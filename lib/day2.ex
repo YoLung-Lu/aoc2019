@@ -1,24 +1,53 @@
 
 defmodule IntCode do
-  def run(list) do
+  def runFeedbackLoop(inputStr) do
 
-    list
-    |> StructureUtil.list_to_indexed_map(0)
-    |> loop_through_operation
-    |> StructureUtil.indexed_map_to_list(0)
-    |> Enum.join(",")
-#    |> IO.inspect
+    phaseSetting = MathUtil.generateSequenceNumber(5, 9..5)
 
+    firstLoopInput = [inputStr, inputStr, inputStr, inputStr, inputStr]
+    firstDiagnostic = [hd(hd(phaseSetting)), 0]
+
+    IO.inspect(firstDiagnostic)
+
+    {list, output} = runEachFeedbackLoop(firstLoopInput, DiagnosticContainer.set(firstDiagnostic), {[], 0})
+    IO.inspect(list)
+    IO.inspect(output)
   end
 
-  defp loop_through_operation(map) do
-    diagnostic = DiagnosticContainer.set([5])
-    loop_through_operation(map, OperationExecutionState.new(0, diagnostic))
+  def runEachFeedbackLoop([], _, lastOutput) do
+    lastOutput
+  end
+
+  def runEachFeedbackLoop([inputStr|tl], diagnostic, lastOutput) do
+#    IO.inspect("input: ")
+#    IO.inspect(inputStr)
+#    IO.inspect(diagnostic)
+    {lastStrList, lastOutput} = lastOutput
+    {outputStr, outputValue} = run(inputStr, diagnostic)
+#    IO.inspect("output: ")
+#    IO.inspect(outputStr)
+#    IO.inspect(outputValue)
+    runEachFeedbackLoop(tl, DiagnosticContainer.set([outputValue]), {[outputStr | lastStrList], outputValue})
+  end
+
+  def run(inputStr, inputList \\ DiagnosticContainer.set([5])) do
+    outputList = inputStr
+      |> String.split(",")
+      |> Enum.map(&String.to_integer/1)
+      |> StructureUtil.list_to_indexed_map(0)
+      |> loop_through_operation(OperationExecutionState.new(0, inputList))
+      |> StructureUtil.indexed_map_to_list(0)
+      |> Enum.join(",")
+#    |> IO.inspect
+
+    output = FileUtil.readFile("output/day7_test.txt")
+    output = String.to_integer(output)
+    {outputList, output}
   end
 
   defp loop_through_operation(map, %OperationExecutionState{state: 99}) do
 #    IO.inspect(map[state.index])
-    IO.inspect("stop")
+#    IO.inspect("stop")
     map
   end
 
@@ -43,15 +72,13 @@ defmodule IntCode do
 
   defp execute_operation(%Operation{opCode: 3} = operation, map, state) do
     {inputValue, diagnostic} = DiagnosticContainer.get(state.get_diagnostic)
-    IO.inspect(inputValue)
     map = Map.merge(map, %{operation.param1 => inputValue})
     {map, OperationExecutionState.continue(state, diagnostic)}
   end
 
   defp execute_operation(%Operation{opCode: 4} = operation, map, state) do
     outputValue = map[operation.param1]
-    MyLog.logToFile(outputValue, "output/day5_test.txt")
-    IO.inspect(outputValue)
+    MyLog.logToFile(outputValue, "output/day7_test.txt")
     {map, OperationExecutionState.continue(state)}
   end
 
@@ -119,6 +146,7 @@ defmodule IntCode do
       opCode == 7 -> Operation.new(opCode, param1Index, param2Index, map[index + 3])
       opCode == 8 -> Operation.new(opCode, param1Index, param2Index, map[index + 3])
       opCode == 99 -> Operation.new(opCode)
+      true -> raise "Operation cannot be found: " <> Integer.to_string(opCode)
     end
 
     nextIndex = cond do
@@ -132,6 +160,8 @@ defmodule IntCode do
       opCode == 8 -> index + 4
       opCode == 99 -> 0
     end
+
+#    IO.inspect(operation)
 
     {operation, nextIndex}
   end

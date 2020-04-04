@@ -17,8 +17,8 @@ defmodule DiagnosticProgram7 do
   end
 
   def run(list, input) do
-    # IO.inspect("RUN:: ")
-    # IO.inspect(input)
+#     IO.inspect("RUN:: ")
+#     IO.inspect(input)
     index = 0
     op = analyzeOperation(list, index)
     commandStateMachine(list, index, op, input, :continue, 0)
@@ -47,7 +47,7 @@ defmodule DiagnosticProgram7 do
       {number, rest}
     end
 
-    IO.inspect("Execute op3, with input: " <> Integer.to_string(inputNumber))
+#    IO.inspect("Execute op3, with input: " <> Integer.to_string(inputNumber))
     {list, index, op, code, out} = executeCommand(list, index, op, inputNumber)
     output = cond do
       code == :op4 -> out
@@ -174,7 +174,8 @@ defmodule DiagnosticProgram7 do
     c = div(op, 10000)
     b = div((op - c * 10000), 1000)
     a = div((op - c * 10000 - b * 1000), 100)
-    IO.inspect({opCode, a, b, c})
+#    IO.inspect({opCode, a, b, c})
+    {opCode, a, b, c}
   end
 
   defp listIndexPositionMode(list, index) do
